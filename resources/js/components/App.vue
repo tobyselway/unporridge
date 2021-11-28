@@ -6,12 +6,13 @@
             <Scene @loop="loop" class="flex-1" />
             <Editor class="h-64" />
         </div>
-        <FileManager v-if="showFileManager" @close="showFileManager = false" />
+        <FileManager v-if="fileManagerOpen" @close="$store.dispatch('closeFileManager')" @select="fileManagerCallback" />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { mapGetters } from 'vuex';
 import Scene from './Scene.vue';
 import Tree from './Tree.vue';
 import Editor from './Editor.vue';
@@ -19,10 +20,6 @@ import Toolbar from './Toolbar.vue';
 import FileManager from './ui/FileManager.vue';
 
 export default defineComponent({
-
-    data: () => ({
-        showFileManager: false,
-    }),
 
     components: {
         Scene,
@@ -42,6 +39,13 @@ export default defineComponent({
             // TODO: Apply scripts to meshes
         },
 
+    },
+
+    computed: {
+        ...mapGetters([
+            'fileManagerOpen',
+            'fileManagerCallback',
+        ]),
     },
 
 });

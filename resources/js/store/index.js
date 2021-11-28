@@ -8,6 +8,8 @@ export default createStore({
         meshes: null,
         lights: null,
         selected: null,
+        fileManagerOpen: false,
+        fileManagerCallback: () => null,
     }),
 
     getters: {
@@ -39,6 +41,14 @@ export default createStore({
             return state.selected;
         },
 
+        fileManagerOpen(state) {
+            return state.fileManagerOpen;
+        },
+
+        fileManagerCallback(state) {
+            return state.fileManagerCallback;
+        },
+
     },
 
     mutations: {
@@ -65,6 +75,14 @@ export default createStore({
 
         addLight(state, light) {
             state.lights.add(light);
+        },
+
+        setFileManagerOpen(state, open) {
+            state.fileManagerOpen = open;
+        },
+
+        setFileManagerCallback(state, callback) {
+            state.fileManagerCallback = callback;
         },
 
     },
@@ -104,6 +122,16 @@ export default createStore({
                 dispatch('unselect');
             }
             entity.removeFromParent();
+        },
+
+        openFileManager({ commit }, callback) {
+            commit('setFileManagerOpen', true);
+            commit('setFileManagerCallback', callback);
+        },
+
+        closeFileManager({ commit }) {
+            commit('setFileManagerOpen', false);
+            commit('setFileManagerCallback', () => null);
         },
 
     },
