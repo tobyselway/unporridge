@@ -62,31 +62,34 @@ export default defineComponent({
 
         addOBJ() {
             this.open = false;
-            this.$store.dispatch('openFileManager', files => files.forEach(filename => {
-                const loader = new OBJLoader();
-                loader.load(
-                    // resource URL
-                    `/api/files/${filename}`,
-                    // called when resource is loaded
-                    obj => {
-                        if(obj.type === 'Group') {
-                            obj.traverse(child => {
-                                if(child.type === 'Mesh') {
-                                    child.material = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
-                                    this.$store.dispatch('addMesh', child);
-                                }
-                            });
-                        } else {
-                            obj.material = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
-                            this.$store.dispatch('addMesh', obj);
-                        }
-                    },
-                    // called when loading is in progresses
-                    xhr => console.log((xhr.loaded / xhr.total * 100) + '% loaded'),
-                    // called when loading has errors
-                    err => console.log('An error happened:', err),
-                );
-            }));
+            this.$store.dispatch('openFileManager', {
+                filter: 'obj',
+                callback: files => files.forEach(filename => {
+                    const loader = new OBJLoader();
+                    loader.load(
+                        // resource URL
+                        `/api/files/${filename}`,
+                        // called when resource is loaded
+                        obj => {
+                            if(obj.type === 'Group') {
+                                obj.traverse(child => {
+                                    if(child.type === 'Mesh') {
+                                        child.material = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
+                                        this.$store.dispatch('addMesh', child);
+                                    }
+                                });
+                            } else {
+                                obj.material = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
+                                this.$store.dispatch('addMesh', obj);
+                            }
+                        },
+                        // called when loading is in progresses
+                        xhr => console.log((xhr.loaded / xhr.total * 100) + '% loaded'),
+                        // called when loading has errors
+                        err => console.log('An error happened:', err),
+                    );
+                }),
+            });
         },
 
         deselect() {

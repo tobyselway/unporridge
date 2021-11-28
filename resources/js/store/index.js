@@ -10,6 +10,7 @@ export default createStore({
         selected: null,
         fileManagerOpen: false,
         fileManagerCallback: () => null,
+        fileManagerFilter: null,
     }),
 
     getters: {
@@ -49,6 +50,10 @@ export default createStore({
             return state.fileManagerCallback;
         },
 
+        fileManagerFilter(state) {
+            return state.fileManagerFilter;
+        },
+
     },
 
     mutations: {
@@ -83,6 +88,10 @@ export default createStore({
 
         setFileManagerCallback(state, callback) {
             state.fileManagerCallback = callback;
+        },
+
+        setFileManagerFilter(state, filter) {
+            state.fileManagerFilter = filter;
         },
 
     },
@@ -124,13 +133,15 @@ export default createStore({
             entity.removeFromParent();
         },
 
-        openFileManager({ commit }, callback) {
+        openFileManager({ commit }, { filter, callback }) {
             commit('setFileManagerOpen', true);
+            commit('setFileManagerFilter', filter);
             commit('setFileManagerCallback', callback);
         },
 
         closeFileManager({ commit }) {
             commit('setFileManagerOpen', false);
+            commit('setFileManagerFilter', null);
             commit('setFileManagerCallback', () => null);
         },
 

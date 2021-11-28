@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -27,3 +28,5 @@ Route::get('/files', fn() => collect(Storage::disk('files')->files())->map(fn($f
 ]));
 
 Route::get('/files/{file}', fn($file) => Storage::disk('files')->download($file));
+
+Route::post('/files', fn(Request $request) => $request->file('file')->storeAs('files', $request->file('file')->getClientOriginalName()));

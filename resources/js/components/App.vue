@@ -6,7 +6,7 @@
             <Scene @loop="loop" class="flex-1" />
             <Editor class="h-64" />
         </div>
-        <FileManager v-if="fileManagerOpen" @close="$store.dispatch('closeFileManager')" @select="fileManagerCallback" />
+        <FileManager v-if="fileManagerOpen" @close="$store.dispatch('closeFileManager')" @select="fileManagerCallback" :filter="fileManagerFilter" />
     </div>
 </template>
 
@@ -45,6 +45,7 @@ export default defineComponent({
         ...mapGetters([
             'fileManagerOpen',
             'fileManagerCallback',
+            'fileManagerFilter',
         ]),
     },
 
