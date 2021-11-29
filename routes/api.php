@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\FileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,13 +20,8 @@ use Illuminate\Support\Str;
 //     return $request->user();
 // });
 
-Route::get('/files', fn() => collect(Storage::disk('files')->files())->map(fn($filename) => [
-    'filename' => $filename,
-    'size' => Storage::disk('files')->size($filename),
-    'ext' => Str::of($filename)->explode('.')->last(),
-    'mimetype' => Storage::disk('files')->getMimeType($filename),
-]));
+Route::get('/files', [FileController::class, 'index']);
 
-Route::get('/files/{file}', fn($file) => Storage::disk('files')->download($file));
+Route::get('/files/{file}', [FileController::class, 'show']);
 
-Route::post('/files', fn(Request $request) => $request->file('file')->storeAs('files', $request->file('file')->getClientOriginalName()));
+Route::post('/files', [FileController::class, 'store']);

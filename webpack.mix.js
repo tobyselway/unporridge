@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -16,4 +17,9 @@ mix
     .postCss('resources/css/app.css', 'public/css', [
         require('tailwindcss'),
     ])
-    .vue({ version: 3 });
+    .vue({ version: 3 })
+    .webpackConfig({
+        plugins: [
+            new MonacoWebpackPlugin(),
+        ],
+    });

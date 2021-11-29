@@ -1,12 +1,21 @@
 <template>
-    <div class="flex items-start justify-between w-full h-full">
-        <Tree class="w-64" />
-        <div class="flex flex-col flex-1 h-full">
-            <Toolbar class="h-12" />
-            <Scene @loop="loop" class="flex-1" />
-            <Editor class="h-64" />
+    <div class="flex flex-col items-start justify-between w-full h-full">
+        <div class="flex items-start justify-between w-full h-full">
+            <Tree class="w-64" />
+            <div class="flex flex-col flex-1 h-full">
+                <Toolbar class="h-12" />
+                <Scene @loop="loop" class="flex-1" />
+                <Editor class="h-64" />
+            </div>
         </div>
-        <FileManager v-if="fileManagerOpen" @close="$store.dispatch('closeFileManager')" @select="fileManagerCallback" :filter="fileManagerFilter" />
+        <StatusBar />
+        <FileManager
+            v-if="fileManagerOpen"
+            @close="$store.dispatch('closeFileManager')"
+            @select="fileManagerCallback"
+            :filter="fileManagerFilter"
+        />
+        <CodeEditor v-if="editorOpen" @close="editorOpen = false" @save="editorSaved" />
     </div>
 </template>
 
@@ -18,6 +27,8 @@ import Tree from './Tree.vue';
 import Editor from './Editor.vue';
 import Toolbar from './Toolbar.vue';
 import FileManager from './ui/FileManager.vue';
+import CodeEditor from './ui/CodeEditor.vue';
+import StatusBar from './ui/StatusBar.vue';
 
 export default defineComponent({
 
@@ -27,9 +38,19 @@ export default defineComponent({
         Editor,
         Toolbar,
         FileManager,
+        CodeEditor,
+        StatusBar,
     },
 
+    data: () => ({
+        editorOpen: false,
+    }),
+
     methods: {
+
+        editorSaved(contents) {
+            console.log(contents);
+        },
 
         loop() {
             // this.meshes.traverse(mesh => {

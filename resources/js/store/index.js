@@ -8,9 +8,14 @@ export default createStore({
         meshes: null,
         lights: null,
         selected: null,
+
         fileManagerOpen: false,
         fileManagerCallback: () => null,
         fileManagerFilter: null,
+
+        showCurrentTask: false,
+        currentTaskName: '',
+        currentTaskPercent: 0,
     }),
 
     getters: {
@@ -54,6 +59,18 @@ export default createStore({
             return state.fileManagerFilter;
         },
 
+        showCurrentTask(state) {
+            return state.showCurrentTask;
+        },
+
+        currentTaskName(state) {
+            return state.currentTaskName;
+        },
+
+        currentTaskPercent(state) {
+            return state.currentTaskPercent;
+        },
+
     },
 
     mutations: {
@@ -92,6 +109,18 @@ export default createStore({
 
         setFileManagerFilter(state, filter) {
             state.fileManagerFilter = filter;
+        },
+
+        setShowCurrentTask(state, show) {
+            state.showCurrentTask = show;
+        },
+
+        setCurrentTaskName(state, name) {
+            state.currentTaskName = name;
+        },
+
+        setCurrentTaskPercent(state, percent) {
+            state.currentTaskPercent = percent;
         },
 
     },
@@ -143,6 +172,18 @@ export default createStore({
             commit('setFileManagerOpen', false);
             commit('setFileManagerFilter', null);
             commit('setFileManagerCallback', () => null);
+        },
+
+        showLoading({ commit }, { name, percent }) {
+            commit('setCurrentTaskName', name);
+            commit('setCurrentTaskPercent', percent);
+            commit('setShowCurrentTask', true);
+        },
+
+        hideLoading({ commit }) {
+            commit('setShowCurrentTask', false);
+            commit('setCurrentTaskName', '');
+            commit('setCurrentTaskPercent', 0);
         },
 
     },

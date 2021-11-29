@@ -75,16 +75,29 @@ export default defineComponent({
                                 obj.traverse(child => {
                                     if(child.type === 'Mesh') {
                                         child.material = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
+                                        if(child.name === '') {
+                                            child.name = 'Mesh';
+                                        }
                                         this.$store.dispatch('addMesh', child);
                                     }
                                 });
                             } else {
                                 obj.material = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
+                                if(obj.name === '') {
+                                    obj.name = 'Mesh';
+                                }
                                 this.$store.dispatch('addMesh', obj);
                             }
+                            this.$store.dispatch('hideLoading');
                         },
                         // called when loading is in progresses
-                        xhr => console.log((xhr.loaded / xhr.total * 100) + '% loaded'),
+                        xhr => {
+                            const percent = (xhr.loaded / xhr.total * 100);
+                            this.$store.dispatch('showLoading', {
+                                name: 'Loading mesh...',
+                                percent,
+                            });
+                        },
                         // called when loading has errors
                         err => console.log('An error happened:', err),
                     );
