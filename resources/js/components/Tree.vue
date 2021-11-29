@@ -1,8 +1,18 @@
 <template>
     <div class="flex flex-col h-full border-r border-gray-800">
-        <h2 class="flex items-center h-12 pl-4 text-sm font-semibold tracking-wider text-gray-400 uppercase border-b border-gray-700">
-            PorridJS
-        </h2>
+        <div class="flex items-center justify-between h-12 px-3 text-sm font-semibold tracking-wider text-gray-400 uppercase border-gray-700" :class="{ 'border-b': !projectMenuOpen }">
+            <h1>UnPorridge</h1>
+            <button @click="projectMenuOpen = !projectMenuOpen" class="text-gray-500 hover:text-gray-400 focus:outline-none">
+                <svg v-if="projectMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+        </div>
+        <div v-if="projectMenuOpen" class="border-b border-gray-700 px-3 pb-3">
+            <button class="py-1 flex items-center focus:outline-none text-gray-500 hover:text-gray-400 text-sm font-semibold">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                <span class="ml-1">Back to Projects</span>
+            </button>
+        </div>
         <div class="flex flex-col flex-1 w-full mt-4" @click.stop="$store.dispatch('unselect')">
             <div class="py-1 mb-4" v-for="group in groups" :key="group.uuid">
                 <p class="ml-2 text-sm font-semibold text-gray-300">{{ group.name }}</p>
@@ -65,6 +75,10 @@ import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 
 export default defineComponent({
+
+    data: () => ({
+        projectMenuOpen: false,
+    }),
 
     computed: {
         ...mapGetters([

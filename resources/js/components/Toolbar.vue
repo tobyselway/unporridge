@@ -1,28 +1,33 @@
 <template>
-    <div class="flex items-center justify-start w-full border-b border-gray-700">
-        <div v-if="open" @click="open = false" class="fixed inset-0"></div>
-        <div class="relative h-full">
-            <button @click="open = !open" @mouseover="selected = 'add'" class="flex items-center w-full h-full pl-2 pr-3 text-sm font-semibold text-gray-400 cursor-default focus:outline-none hover:text-gray-300" :class="{ 'bg-gray-800': open && selected == 'add' }">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                <span class="ml-1">Add</span>
-            </button>
-            <ul v-if="open && selected == 'add'" class="absolute top-0 left-0 w-32 py-1 mt-12 text-gray-300 bg-gray-800 border-b border-l border-r border-gray-700 shadow">
-                <li @click="addCube" class="px-3 py-1 text-sm cursor-default hover:bg-gray-700">Cube</li>
-                <li @click="addLight" class="px-3 py-1 text-sm cursor-default hover:bg-gray-700">Point Light</li>
-                <li @click="addOBJ" class="px-3 py-1 text-sm cursor-default hover:bg-gray-700">OBJ File</li>
-            </ul>
-        </div>
+    <div class="flex items-center justify-between w-full border-b border-gray-700">
+        <div class="flex items-center justify-start h-full">
+            <div v-if="open" @click="open = false" class="fixed inset-0"></div>
+            <div class="relative h-full">
+                <button @click="open = !open" @mouseover="selected = 'add'" class="flex items-center w-full h-full pl-2 pr-3 text-sm font-semibold text-gray-400 cursor-default focus:outline-none hover:text-gray-300" :class="{ 'bg-gray-800': open && selected == 'add' }">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    <span class="ml-1">Add</span>
+                </button>
+                <ul v-if="open && selected == 'add'" class="absolute top-0 left-0 w-32 py-1 mt-12 text-gray-300 bg-gray-800 border-b border-l border-r border-gray-700 shadow">
+                    <li @click="addCube" class="px-3 py-1 text-sm cursor-default hover:bg-gray-700">Cube</li>
+                    <li @click="addLight" class="px-3 py-1 text-sm cursor-default hover:bg-gray-700">Point Light</li>
+                    <li @click="addOBJ" class="px-3 py-1 text-sm cursor-default hover:bg-gray-700">OBJ File</li>
+                </ul>
+            </div>
 
-        <div class="relative h-full">
-            <button @click="open = !open" @mouseover="selected = 'edit'" class="flex items-center w-full h-full pl-2 pr-3 text-sm font-semibold text-gray-400 cursor-default focus:outline-none hover:text-gray-300" :class="{ 'bg-gray-800': open && selected == 'edit' }">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                <span class="ml-1">Edit</span>
-            </button>
-            <ul v-if="open && selected == 'edit'" class="absolute top-0 left-0 w-32 py-1 mt-12 text-gray-300 bg-gray-800 border-b border-l border-r border-gray-700 shadow">
-                <li @click="deselect" class="px-3 py-1 text-sm cursor-default hover:bg-gray-700">Deselect</li>
-            </ul>
-        </div>
+            <div class="relative h-full">
+                <button @click="open = !open" @mouseover="selected = 'edit'" class="flex items-center w-full h-full pl-2 pr-3 text-sm font-semibold text-gray-400 cursor-default focus:outline-none hover:text-gray-300" :class="{ 'bg-gray-800': open && selected == 'edit' }">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    <span class="ml-1">Edit</span>
+                </button>
+                <ul v-if="open && selected == 'edit'" class="absolute top-0 left-0 w-32 py-1 mt-12 text-gray-300 bg-gray-800 border-b border-l border-r border-gray-700 shadow">
+                    <li @click="deselect" class="px-3 py-1 text-sm cursor-default hover:bg-gray-700">Deselect</li>
+                </ul>
+            </div>
 
+        </div>
+        <div class="flex items-center h-full px-2">
+            <img class="w-8 h-8 rounded-full object-cover border border-gray-800" src="https://userstock.io/data/wp-content/uploads/2017/09/lesly-b-juarez-276953-1024x885.jpg" alt="" />
+        </div>
     </div>
 </template>
 
@@ -99,7 +104,14 @@ export default defineComponent({
                             });
                         },
                         // called when loading has errors
-                        err => console.log('An error happened:', err),
+                        err => {
+                            // TODO: Implement error toasts
+                            // this.$store.dispatch('pushError', {
+                            //     name: 'Error loading mesh',
+                            //     description: err,
+                            // });
+                            this.$store.dispatch('hideLoading');
+                        }
                     );
                 }),
             });
