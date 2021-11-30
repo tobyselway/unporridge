@@ -73,7 +73,10 @@ export default defineComponent({
             light.position.set(5, 5, 5);
             const lightHelper = new THREE.PointLightHelper(light, 0.5);
             lightHelper.name = 'Helper';
-            light.children.push(lightHelper);
+            this.$store.dispatch('registerHelper', {
+                uuid: light.uuid,
+                helper: lightHelper,
+            });
             this.$store.dispatch('addLight', light);
         },
 
@@ -177,6 +180,10 @@ export default defineComponent({
             composer.render(scene, camera);
         },
 
+    },
+
+    unmounted() {
+        renderer.dispose();
     },
 
     computed: {

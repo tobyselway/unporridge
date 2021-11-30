@@ -27,7 +27,13 @@
 
         </div>
         <div class="flex items-center h-full px-2">
-            <img class="w-8 h-8 rounded-full object-cover border border-gray-800" src="https://userstock.io/data/wp-content/uploads/2017/09/lesly-b-juarez-276953-1024x885.jpg" alt="" />
+            <button v-if="!playMode" @click="$store.dispatch('enterPlayMode')" class="text-green-500 hover:text-green-400 focus:outline-none">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+            </button>
+            <button v-else @click="$store.dispatch('leavePlayMode')" class="text-red-500 hover:text-red-400 focus:outline-none">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd"></path></svg>
+            </button>
+            <img class="ml-2 w-8 h-8 rounded-full object-cover border border-gray-800" src="https://userstock.io/data/wp-content/uploads/2017/09/lesly-b-juarez-276953-1024x885.jpg" alt="" />
         </div>
     </div>
 </template>
@@ -63,7 +69,10 @@ export default defineComponent({
             light.position.set(5, 5, 5);
             const lightHelper = new THREE.PointLightHelper(light, 0.5);
             lightHelper.name = 'Helper';
-            light.children.push(lightHelper);
+            this.$store.dispatch('registerHelper', {
+                uuid: light.uuid,
+                helper: lightHelper,
+            });
             this.$store.dispatch('addLight', light);
         },
 
@@ -132,6 +141,12 @@ export default defineComponent({
             this.$store.dispatch('unselect');
         },
 
+    },
+
+    computed: {
+        ...mapGetters([
+            'playMode',
+        ]),
     },
 
 });

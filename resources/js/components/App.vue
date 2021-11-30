@@ -4,7 +4,8 @@
             <Tree class="w-64" />
             <div class="flex flex-col flex-1 h-full">
                 <Toolbar class="h-12" />
-                <Scene @loop="loop" class="flex-1" />
+                <Scene v-show="!playMode" @loop="loop" class="flex-1" />
+                <Game v-if="playMode" class="flex-1" />
                 <Editor class="h-64" />
             </div>
         </div>
@@ -23,6 +24,7 @@
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 import Scene from './Scene.vue';
+import Game from './Game.vue';
 import Tree from './Tree.vue';
 import Editor from './Editor.vue';
 import Toolbar from './Toolbar.vue';
@@ -34,6 +36,7 @@ export default defineComponent({
 
     components: {
         Scene,
+        Game,
         Tree,
         Editor,
         Toolbar,
@@ -67,6 +70,7 @@ export default defineComponent({
             'fileManagerOpen',
             'fileManagerCallback',
             'fileManagerFilter',
+            'playMode',
         ]),
     },
 

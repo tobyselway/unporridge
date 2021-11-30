@@ -8,9 +8,12 @@ export default createStore({
         meshes: null,
         lights: null,
         cameras: null,
+        helpers: {},
         selected: null,
         
         errors: [],
+
+        playMode: false,
 
         fileManagerOpen: false,
         fileManagerCallback: () => null,
@@ -37,6 +40,10 @@ export default createStore({
 
         cameras(state) {
             return state.cameras;
+        },
+
+        helpers(state) {
+            return state.helpers;
         },
 
        groups(state) {
@@ -80,6 +87,10 @@ export default createStore({
 
         errors(state) {
             return state.errors;
+        },
+
+        playMode(state) {
+            return state.playMode;
         },
 
     },
@@ -150,6 +161,18 @@ export default createStore({
             state.errors.splice(ix, 1);
         },
 
+        setPlayMode(state, playMode) {
+            state.playMode = playMode;
+        },
+
+        unsetHelper(state, uuid) {
+            delete state.helpers[uuid];
+        },
+
+        registerHelper(state, { uuid, helper }) {
+            state.helpers[uuid] = helper;
+        },
+
     },
 
     actions: {
@@ -190,9 +213,13 @@ export default createStore({
             commit('addCamera', camera);
         },
 
-        delete({ state, dispatch }, entity) {
+        delete({ state, commit, dispatch }, entity) {
             if(state.selected && entity.uuid == state.selected.uuid) {
                 dispatch('unselect');
+            }
+            if(state.helpers[entity.uuid]) {
+                state.helpers[entity.uuid].removeFromParent();
+                commit('unsetHelper', entity.uuid);
             }
             entity.removeFromParent();
         },
@@ -227,6 +254,19 @@ export default createStore({
 
         deleteError({ commit }, ix) {
             commit('deleteError', ix);
+        },
+
+        enterPlayMode({ commit }) {
+            commit('setPlayMode', true);
+        },
+
+        leavePlayMode({ commit }) {
+            commit('setPlayMode', false);
+        },
+
+        registerHelper({ commit, state }, { uuid, helper }) {
+            commit('registerHelper', { uuid, helper });
+            state.scene.add(helper);
         },
 
     },
