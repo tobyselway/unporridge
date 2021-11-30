@@ -17,6 +17,7 @@ let renderer;
 let composer;
 let meshes;
 let lights;
+let cameras;
 let orbit;
 let control;
 
@@ -59,6 +60,11 @@ export default defineComponent({
             lights.name = 'Lights';
             scene.add(lights);
             this.$store.dispatch('setLightsGroup', lights);
+
+            cameras = new THREE.Group();
+            cameras.name = 'Cameras';
+            scene.add(cameras);
+            this.$store.dispatch('setCamerasGroup', cameras);
         },
 
         setupLight() {

@@ -2,6 +2,15 @@
     <div class="w-full h-6 px-2 py-0.5 bg-gray-900 border-t border-gray-800 flex items-center justify-between text-xs tracking-tight font-semibold text-gray-500">
         <p>UnPorridge v0.1.0</p>
         <div class="flex items-center">
+            <div class="fixed bottom-0 right-0 px-2 py-8 flex items-end justify-end flex-col">
+                <ErrorBox
+                    v-for="(error, i) in errors"
+                    :key="`error-${i}`"
+                    :error="error"
+                    @close="$store.dispatch('deleteError', i)"
+                    class="mt-3"
+                />
+            </div>
             <div v-if="showCurrentTask" class="flex items-center">
                 <svg class="animate-spin h-3 w-3 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -19,14 +28,20 @@
 <script>
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
+import ErrorBox from './ErrorBox.vue';
 
 export default defineComponent({
+
+    components: {
+        ErrorBox,
+    },
 
     computed: {
         ...mapGetters([
             'showCurrentTask',
             'currentTaskName',
             'currentTaskPercent',
+            'errors',
         ]),
     },
 

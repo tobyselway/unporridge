@@ -17,7 +17,7 @@
             <Scalar label="Intensity" v-model="selected.intensity" />
             <Scalar label="Decay" v-model="selected.decay" />
         </EditorPanel>
-        <EditorPanel title="Transform" v-if="selected.type !== 'PointLightHelper'">
+        <EditorPanel title="Transform" v-if="selected.type !== 'PointLightHelper' && selected.type !== 'CameraHelper'">
             <Vector3 label="Position" v-model:x="selected.position.x" v-model:y="selected.position.y" v-model:z="selected.position.z" />
             <Vector3 label="Rotation" v-model:x="selected.rotation.x" v-model:y="selected.rotation.y" v-model:z="selected.rotation.z" />
             <Vector3 label="Scale" v-model:x="selected.scale.x" v-model:y="selected.scale.y" v-model:z="selected.scale.z" />

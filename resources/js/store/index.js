@@ -7,7 +7,10 @@ export default createStore({
         scene: null,
         meshes: null,
         lights: null,
+        cameras: null,
         selected: null,
+        
+        errors: [],
 
         fileManagerOpen: false,
         fileManagerCallback: () => null,
@@ -30,6 +33,10 @@ export default createStore({
 
         lights(state) {
             return state.lights;
+        },
+
+        cameras(state) {
+            return state.cameras;
         },
 
        groups(state) {
@@ -71,6 +78,10 @@ export default createStore({
             return state.currentTaskPercent;
         },
 
+        errors(state) {
+            return state.errors;
+        },
+
     },
 
     mutations: {
@@ -99,6 +110,14 @@ export default createStore({
             state.lights.add(light);
         },
 
+        setCameras(state, cameras) {
+            state.cameras = cameras;
+        },
+
+        addCamera(state, camera) {
+            state.cameras.add(camera);
+        },
+
         setFileManagerOpen(state, open) {
             state.fileManagerOpen = open;
         },
@@ -121,6 +140,14 @@ export default createStore({
 
         setCurrentTaskPercent(state, percent) {
             state.currentTaskPercent = percent;
+        },
+
+        pushError(state, error) {
+            state.errors.push(error);
+        },
+
+        deleteError(state, ix) {
+            state.errors.splice(ix, 1);
         },
 
     },
@@ -155,6 +182,14 @@ export default createStore({
             commit('addLight', light);
         },
 
+        setCamerasGroup({ commit }, cameras) {
+            commit('setCameras', cameras);
+        },
+
+        addCamera({ commit }, camera) {
+            commit('addCamera', camera);
+        },
+
         delete({ state, dispatch }, entity) {
             if(state.selected && entity.uuid == state.selected.uuid) {
                 dispatch('unselect');
@@ -184,6 +219,14 @@ export default createStore({
             commit('setShowCurrentTask', false);
             commit('setCurrentTaskName', '');
             commit('setCurrentTaskPercent', 0);
+        },
+
+        pushError({ commit }, text) {
+            commit('pushError', { text });
+        },
+
+        deleteError({ commit }, ix) {
+            commit('deleteError', ix);
         },
 
     },
